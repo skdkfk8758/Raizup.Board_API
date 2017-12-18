@@ -2,6 +2,7 @@
 // 옵션 초기화
 var modeOption = { HORIZONTAL: "horizontal", VERTICAL: "vertical", FADE: "fade" };
 var pagerTypeOption = { FULL: "full", SHORT: "short" };
+var autoDirectionOption = { NEXT: "next", PREV: "prev" };
 var boolOptions = { TRUE: true, FALSE: false };
 var options = {
   item:
@@ -31,7 +32,6 @@ var options = {
         preventDefaultSwipeX: {selectOption: boolOptions, desc: "터치스크린이 X 축을 따라 움직이는지 설정", type: "bool_true",upperMenu: "general"},
         preventDefaultSwipeY: {selectOption: boolOptions, desc: "터치스크린이 Y 축을 따라 움직이는지 설정", type: "bool_false",upperMenu: "general"},
         // wrapperClass:  -> wrapper 있으면 설정
-        // slideWidth: {default: 600, desc: "슬라이드 가로사이즈 설정", type: "input"},
 
         //pager 옵션
         pager: {selectOption: boolOptions, desc: "페이저 추가", type: "bool_true", upperMenu: "pager"},
@@ -53,8 +53,158 @@ var options = {
         autoControlsCombine : {selectOption: boolOptions, desc: "슬라이드 동작시 Stop 표시", type: "bool_false", upperMenu: "controls"},
         autoControlsSelector : {selectOption: boolOptions, desc: "자동 컨트롤을 채우는데 사용되는 선택자", type: "bool_true", upperMenu: "controls"},
         keyboardEnabled : {selectOption: boolOptions, desc: "키보트 컨트롤 설정", type: "bool_false", upperMenu: "controls"},
+
+        //Auto 옵션
+        auto : {selectOption: boolOptions, desc: "슬라이드 자동 전환", type: "bool_false", upperMenu: "auto"},
+        stopAutoOnClick : {selectOption: boolOptions, desc: "컨트롤과의 상호 작용시 자동 중지", type: "bool_false", upperMenu: "auto"},
+        pause : {default: 4000, desc: "자동전환 시간 간격", type: "input", upperMenu: "auto"},
+        autoStart : {selectOption: boolOptions, desc: "로드시 자동시작 설정", type: "bool_true", upperMenu: "auto"},
+        autoDirection : {selectOption: autoDirectionOption, desc: "자동슬라이드 전환 방향", type: "directionType", upperMenu: "auto"},
+        autoHover : {selectOption: boolOptions, desc: "마우스 hover시 슬라이드 멈춤", type: "bool_false", upperMenu: "auto"},
+        autoDelay : {default: 0, desc: "슬라이드 시작 전 대기시간", type: "input", upperMenu: "auto"},
+
+        //Carousel 옵션
+        minSlides: {default: 1, desc:"슬라이드 최소표시 수", type: "input", upperMenu: "carousel"},
+        maxSlides: {default: 1, desc:"슬라이드 최대표시 수", type: "input", upperMenu: "carousel"},
+        moveSlides: {default: 0, desc:"전환시 이동할 슬라이드 수", type: "input", upperMenu: "carousel"},
+        slideWidth: {default: 600, desc: "슬라이드 가로사이즈 설정", type: "input", upperMenu: "carousel"},
+        shrinkItems: {selectOption: boolOptions, desc: "view-port에 맞게 이미지 수정", type: "bool_false", upperMenu: "carousel"},
+
+        //Accessibility 옵션
+        ariaLive: {selectOption: boolOptions, desc: "슬라이더에 Aria Live 속성을 추가", type: "bool_true", upperMenu: "accessibility"},
+        ariaHidden: {selectOption: boolOptions, desc: "보이지 않는 슬라이드에 Aria Hidden 속성을 추가", type: "bool_true", upperMenu: "accessibility"},
+
+
     }
 };
+
+//  일반옵션
+function setMode(){ options.mode = $("#mode option:selected").val(); }
+function setSpeed(){ options.speed = parseInt($("#speed").val()); }
+function setMargin(){ options.slideMargin = parseInt($("#slideMargin").val()); }
+function setStartSlide(){ options.startSlide = parseInt($("#startSlide").val())-1; }
+function setRandomStart(){  var value = $("#randomStart option:selected").val(); (value == 'true') ? options.randomStart = value : options.randomStart = ""; }
+function setLoop(){ var value = $("#infiniteLoop option:selected").val(); (value == 'true') ? options.infiniteLoop = value : options.infiniteLoop = ""; }
+function setHideController(){ var value = $("#hideControlOnEnd option:selected").val(); (value  == 'true') ? options.hideControlOnEnd = value : options.hideControlOnEnd = ""; }
+function setCaptions(){ var value = $("#captions option:selected").val(); (value  == 'true') ? options.captions = value : options.captions = ""; }
+function setTicker(){ var value = $("#ticker option:selected").val(); (value  == 'true') ? options.ticker = value : options.ticker = ""; }
+function setTickerHover(){ var value = $("#tickerHover option:selected").val(); (value  == 'true') ? options.tickerHover = value : options.tickerHover = ""; }
+function setAdaptiveHeight(){ var value = $("#adaptiveHeight option:selected").val(); (value  == 'true') ? options.adaptiveHeight = value : options.adaptiveHeight = ""; }
+function setAdaptiveHeightSpeed(){ options.adaptiveHeightSpeed = parseInt($("#adaptiveHeightSpeed").val()); }
+function setVideo(){ var value = $("#video option:selected").val(); (value  == 'true') ? options.video = value : options.video = ""; }
+function setResponse(){ var value = $("#responsive option:selected").val(); (value  == 'true') ? options.responsive = value : options.responsive = ""; }
+function setUseCSS(){ var value = $("#useCSS option:selected").val(); (value  == 'true') ? options.useCSS = value : options.useCSS = ""; }
+function setTouchEnabled(){ var value = $("#touchEnabled option:selected").val(); (value  == 'true') ? options.touchEnabled = value : options.touchEnabled = ""; }
+function setSwipeThreshold(){ options.swipeThreshold = parseInt($("#swipeThreshold").val()); }
+function setOneToOneTouch(){ var value = $("#oneToOneTouch option:selected").val(); (value == 'true') ? options.oneToOneTouch = value : options.oneToOneTouch = ""; }
+function setPreventDefaultSwipeX(){ var value = $("#preventDefaultSwipeX option:selected").val(); (value == 'true') ? options.preventDefaultSwipeX = value : options.preventDefaultSwipeX = ""; }
+function setPreventDefaultSwipeY(){ var value = $("#preventDefaultSwipeY option:selected").val(); (value == 'true') ? options.preventDefaultSwipeY = value : options.preventDefaultSwipeY = ""; }
+function setSlideWidth(){ options.slideWidth = parseInt($("#slideWidth").val()); }
+
+// Pager 옵션
+function setPager() { var value = $("#pager option:selected").val(); (value == 'true') ? options.pager = value : options.pager = ""; }
+function setPagerType() { options.pagerType = $("#pagerType option:selected").val(); }
+function setPagerShortSeparator() { options.pagerShortSeparator = $("#pagerShortSeparator").val(); }
+function setPagerSelector() { options.pagerSelector = $("#pagerSelector").val(); }
+function setPagerCustom() { options.pagerCustom = $("#pagerCustom").val(); }
+function setBuildPager() { options.buildPager = $("#buildPager").val(); }
+
+// Controls 옵션
+function setControls() { var value = $("#controls option:selected").val(); (value == 'true') ? options.controls = value : options.controls = ""; }
+function setNextText() { options.nextText = $("#nextText").val(); }
+function setPrevText() { options.prevText = $("#prevText").val(); }
+function setNextSelector() { options.nextSelector = $("#nextSelector").val(); }
+function setPrevSelector() { options.prevSelector = $("#prevSelector").val(); }
+function setAutoControls() { var value = $("#autoControls option:selected").val(); (value == 'true') ? options.autoControls = value : options.autoControls = ""; }
+function setStartText() { options.startText = $("#startText").val(); }
+function setStopText() { options.stopText = $("#stopText").val(); }
+function setAutoControlsCombine() { var value = $("#autoControlsCombine option:selected").val(); (value == 'true') ? options.autoControlsCombine = value : options.autoControlsCombine = ""; }
+function setAutoControlsSelector() { var value = $("#autoControlsSelector option:selected").val(); (value == 'true') ? options.autoControlsSelector = value : options.autoControlsSelector = ""; }
+function setKeyboardEnabled() { var value = $("#keyboardEnabled option:selected").val(); (value == 'true') ? options.keyboardEnabled = value : options.keyboardEnabled = ""; }
+
+//Auto 옵션
+function setAuto() { var value = $("#auto option:selected").val(); (value == 'true') ? options.auto = value : options.auto = ""; }
+function setStopAutoOnClick() { var value = $("#stopAutoOnClick option:selected").val(); (value == 'true') ? options.stopAutoOnClick = value : options.stopAutoOnClick = ""; }
+function setAutoStart() { var value = $("#autoStart option:selected").val(); (value == 'true') ? options.autoStart = value : options.autoStart = ""; }
+function setAutoHover() { var value = $("#autoHover option:selected").val(); (value == 'true') ? options.autoHover = value : options.autoHover = ""; }
+function setPause() { options.pause = $("#pause").val(); }
+function setAutoDirection() { options.autoDirection = $("#autoDirection option:selected").val(); }
+function setAutoDelay() { options.autoDelay = $("#autoDelay").val(); }
+
+//Carousel 옵션
+function setMinSlides() { options.minSlides = $("#minSlides").val(); }
+function setMaxSlides() { options.maxSlides = $("#maxSlides").val(); }
+function setMoveSlides() { options.moveSlides = $("#moveSlides").val(); }
+function setSlideWidth() { options.slideWidth = $("#slideWidth").val(); }
+function setShrinkItems() { var value = $("#shrinkItems option:selected").val(); (value == 'true') ? options.shrinkItems = value : options.shrinkItems = ""; }
+
+//Accessibility 옵션
+function setAriaLive() { var value = $("#ariaLive option:selected").val(); (value == 'true') ? options.ariaLive = value : options.ariaLive = ""; }
+function setAriaHidden() { var value = $("#ariaHidden option:selected").val(); (value == 'true') ? options.ariaHidden = value : options.ariaHidden = ""; }
+
+// 뷰에서 설정된 옵션 세팅
+function setOptions() {
+    setMode();
+    setSpeed();
+    setMargin();
+    setStartSlide();
+    setRandomStart();
+    setLoop();
+    setHideController();
+    setCaptions();
+    setTicker();
+    setTickerHover();
+    setAdaptiveHeight();
+    setAdaptiveHeightSpeed();
+    setVideo();
+    setResponse();
+    setUseCSS();
+    setTouchEnabled();
+    setSwipeThreshold();
+    setOneToOneTouch();
+    setPreventDefaultSwipeX();
+    setPreventDefaultSwipeY();
+    setSlideWidth();
+
+    setPager();
+    setPagerType();
+    setPagerCustom();
+    setPagerSelector();
+    setPagerShortSeparator();
+    setBuildPager();
+
+    setControls();
+    setNextText();
+    setPrevText();
+    setNextSelector();
+    setPrevSelector();
+    setAutoControls();
+    setStartText();
+    setStopText();
+    setAutoControlsCombine();
+    setAutoControlsSelector();
+    setKeyboardEnabled();
+
+    setAuto();
+    setStopAutoOnClick();
+    setPause();
+    setAutoStart();
+    setAutoDirection();
+    setAutoHover();
+    setAutoDelay();
+
+    setMinSlides();
+    setMaxSlides();
+    setMoveSlides();
+    setSlideWidth();
+    setShrinkItems();
+
+    setAriaLive();
+    setAriaHidden();
+
+    return options;
+}
+
 
 // ----------------------------  테이블 생성
 function showTable(){ $.each(options.item, function(name, value) { buildTableRow(name, value); } ); }
@@ -65,6 +215,7 @@ function buildTableRow(name, value){
         case 'bool_false': buildSelectBox(name, value, value.selectOption.FALSE, value.upperMenu); break;
         case 'bool_true': buildSelectBox(name, value, value.selectOption.TRUE, value.upperMenu); break;
         case 'pagerType': buildSelectBox(name, value, value.selectOption.FULL, value.upperMenu); break;
+        case 'directionType': buildSelectBox(name, value, value.selectOption.NEXT, value.upperMenu); break;
         default:
             // code
     }
@@ -114,122 +265,3 @@ function changeSlider(){
     $('.setting-form').hide();
 }
 // ------------------------------------------
-
-//  일반옵션
-function setMode(){ options.mode = $("#mode option:selected").val(); }
-function setSpeed(){ options.speed = parseInt($("#speed").val()); }
-function setMargin(){ options.slideMargin = parseInt($("#slideMargin").val()); }
-function setStartSlide(){ options.startSlide = parseInt($("#startSlide").val())-1; }
-function setRandomStart(){  var value = $("#randomStart option:selected").val(); (value == 'true') ? options.randomStart = value : options.randomStart = ""; }
-function setLoop(){ var value = $("#infiniteLoop option:selected").val(); (value == 'true') ? options.infiniteLoop = value : options.infiniteLoop = ""; }
-function setHideController(){ var value = $("#hideControlOnEnd option:selected").val(); (value  == 'true') ? options.hideControlOnEnd = value : options.hideControlOnEnd = ""; }
-function setCaptions(){ var value = $("#captions option:selected").val(); (value  == 'true') ? options.captions = value : options.captions = ""; }
-function setTicker(){ var value = $("#ticker option:selected").val(); (value  == 'true') ? options.ticker = value : options.ticker = ""; }
-function setTickerHover(){ var value = $("#tickerHover option:selected").val(); (value  == 'true') ? options.tickerHover = value : options.tickerHover = ""; }
-function setAdaptiveHeight(){ var value = $("#adaptiveHeight option:selected").val(); (value  == 'true') ? options.adaptiveHeight = value : options.adaptiveHeight = ""; }
-function setAdaptiveHeightSpeed(){ options.adaptiveHeightSpeed = parseInt($("#adaptiveHeightSpeed").val()); }
-function setVideo(){ var value = $("#video option:selected").val(); (value  == 'true') ? options.video = value : options.video = ""; }
-function setResponse(){ var value = $("#responsive option:selected").val(); (value  == 'true') ? options.responsive = value : options.responsive = ""; }
-function setUseCSS(){ var value = $("#useCSS option:selected").val(); (value  == 'true') ? options.useCSS = value : options.useCSS = ""; }
-function setTouchEnabled(){ var value = $("#touchEnabled option:selected").val(); (value  == 'true') ? options.touchEnabled = value : options.touchEnabled = ""; }
-function setSwipeThreshold(){ options.swipeThreshold = parseInt($("#swipeThreshold").val()); }
-function setOneToOneTouch(){ var value = $("#oneToOneTouch option:selected").val(); (value == 'true') ? options.oneToOneTouch = value : options.oneToOneTouch = ""; }
-function setPreventDefaultSwipeX(){ var value = $("#preventDefaultSwipeX option:selected").val(); (value == 'true') ? options.preventDefaultSwipeX = value : options.preventDefaultSwipeX = ""; }
-function setPreventDefaultSwipeY(){ var value = $("#preventDefaultSwipeY option:selected").val(); (value == 'true') ? options.preventDefaultSwipeY = value : options.preventDefaultSwipeY = ""; }
-function setSlideWidth(){ options.slideWidth = parseInt($("#slideWidth").val()); }
-
-// Pager 옵션
-function setPager(){ var value = $("#pager option:selected").val(); (value == 'true') ? options.pager = value : options.pager = ""; }
-function setPagerType(){ options.pagerType = $("#pagerType option:selected").val(); }
-function setPagerShortSeparator(){ options.pagerShortSeparator = $("#pagerShortSeparator").val(); }
-function setPagerSelector(){ options.pagerSelector = $("#pagerSelector").val(); }
-function setPagerCustom(){ options.pagerCustom = $("#pagerCustom").val(); }
-function setBuildPager(){ options.buildPager = $("#buildPager").val(); }
-
-// Controls 옵션
-function setControls() { var value = $("#controls option:selected").val(); (value == 'true') ? options.controls = value : options.controls = ""; }
-function setNextText(){ options.nextText = $("#nextText").val(); }
-function setPrevText(){ options.prevText = $("#prevText").val(); }
-function setNextSelector(){ options.nextSelector = $("#nextSelector").val(); }
-function setPrevSelector(){ options.prevSelector = $("#prevSelector").val(); }
-function setAutoControls() { var value = $("#autoControls option:selected").val(); (value == 'true') ? options.autoControls = value : options.autoControls = ""; }
-function setStartText(){ options.startText = $("#startText").val(); }
-function setStopText(){ options.stopText = $("#stopText").val(); }
-function setAutoControlsCombine() { var value = $("#autoControlsCombine option:selected").val(); (value == 'true') ? options.autoControlsCombine = value : options.autoControlsCombine = ""; }
-function setAutoControlsSelector() { var value = $("#autoControlsSelector option:selected").val(); (value == 'true') ? options.autoControlsSelector = value : options.autoControlsSelector = ""; }
-function setKeyboardEnabled() { var value = $("#keyboardEnabled option:selected").val(); (value == 'true') ? options.keyboardEnabled = value : options.keyboardEnabled = ""; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 뷰에서 설정된 옵션 세팅
-function setOptions() {
-    setMode();
-    setSpeed();
-    setMargin();
-    setStartSlide();
-    setRandomStart();
-    setLoop();
-    setHideController();
-    setCaptions();
-    setTicker();
-    setTickerHover();
-    setAdaptiveHeight();
-    setAdaptiveHeightSpeed();
-    setVideo();
-    setResponse();
-    setUseCSS();
-    setTouchEnabled();
-    setSwipeThreshold();
-    setOneToOneTouch();
-    setPreventDefaultSwipeX();
-    setPreventDefaultSwipeY();
-    setSlideWidth();
-
-    setPager();
-    setPagerType();
-    setPagerCustom();
-    setPagerSelector();
-    setPagerShortSeparator();
-    setBuildPager();
-
-    setControls();
-    setNextText();
-    setPrevText();
-    setNextSelector();
-    setPrevSelector();
-    setAutoControls();
-    setStartText();
-    setStopText();
-    setAutoControlsCombine();
-    setAutoControlsSelector();
-    setKeyboardEnabled();
-
-    return options;
-}
