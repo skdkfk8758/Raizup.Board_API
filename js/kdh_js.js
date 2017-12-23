@@ -229,7 +229,7 @@ function buildSelectBox(name, value, defaultOption, upperMenu){
                     <td>Set ${name}</td>
                     <td>${value.desc}</td>
                     <td>
-                        <select id="${name}">
+                        <select id="${name}" name="setter[${name}]">
                             <option value="${defaultOption}" default="${defaultOption}">${defaultOption}</option>
                         </select>
                     </td>
@@ -247,7 +247,7 @@ function buildInputBox(name, value, upperMenu){
                     <td>Set ${name}</td>
                     <td>${value.desc}</td>
                     <td>
-                        <input type="text" id="${name}" value="${value.default}">
+                        <input type="text" id="${name}" value="${value.default}" name="setter[${name}]">
                     </td>
                 </tr>
                 `;
@@ -256,12 +256,10 @@ function buildInputBox(name, value, upperMenu){
 
 // ---------------------------- 적용버튼 실행
 $("#apply-button").click(function() {
-    changeSlider();
+    // changeSlider();
 });
 
-function changeSlider(){
-    $('.hideslider').show();
-    $('.slider').bxSlider(setOptions());
-    $('.setting-form').hide();
+function changeSlider(option){
+    alert(option)
+    $('.bxslider').bxSlider(option);
 }
-// ------------------------------------------

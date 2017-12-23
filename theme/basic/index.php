@@ -44,6 +44,27 @@ include_once(G5_THEME_PATH.'/head.php');
 
 </div>
 
+<?php
+  echo latest('shop_basic', 'main_slide', 5, 23);
+?>
+
+<script src="http://test.raizup.kr/board_api/js/kdh_js.js"></script>
+<script>
+    var setter = '<?= json_encode($setter) ?>';
+    var parsed_setter = JSON.parse(setter);
+    
+    for(key in parsed_setter) {
+        if(parsed_setter[key] == "false") {
+            parsed_setter[key] = '';
+        }
+}
+
+    
+     $(document).ready(function(){
+        changeSlider(parsed_setter);
+    });
+</script>
+
 <div class="latest_wr">
     <!--  사진 최신글2 { -->
     <?php
@@ -58,3 +79,4 @@ include_once(G5_THEME_PATH.'/head.php');
 <?php
 include_once(G5_THEME_PATH.'/tail.php');
 ?>
+
