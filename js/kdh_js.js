@@ -260,6 +260,5 @@ $("#apply-button").click(function() {
 });
 
 function changeSlider(option){
-    alert(option)
     $('.bxslider').bxSlider(option);
 }

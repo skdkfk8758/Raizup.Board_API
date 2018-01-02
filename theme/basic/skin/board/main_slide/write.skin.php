@@ -273,6 +273,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$board_skin_url.'/style.css">', 0
     <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
+
 <form action="../index.php" method="post">
     <div class="setting-form">
         <ul id="myTab" class="nav nav-tabs" role="tablist">

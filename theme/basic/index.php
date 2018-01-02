@@ -44,6 +44,9 @@ include_once(G5_THEME_PATH.'/head.php');
 
 </div>
 
+<!--슬라이더 세팅 -->
+
+
 <?php
   echo latest('shop_basic', 'main_slide', 5, 23);
 ?>
@@ -64,6 +67,9 @@ include_once(G5_THEME_PATH.'/head.php');
         changeSlider(parsed_setter);
     });
 </script>
+
+<!--슬라이더 세팅 -->
+
 
 <div class="latest_wr">
     <!--  사진 최신글2 { -->

@@ -234,9 +234,17 @@ if (isset($wr_id) && $wr_id) {
 if ($member['mb_level'] >= $board['bo_list_level'] && $board['bo_use_list_view'] || empty($wr_id))
     include_once (G5_BBS_PATH.'/list.php');
 
-include_once(G5_BBS_PATH.'/board_tail.php');
+// include_once(G5_BBS_PATH.'/board_tail.php');
 
 echo "\n<!-- 사용스킨 : ".(G5_IS_MOBILE ? $board['bo_mobile_skin'] : $board['bo_skin'])." -->\n";
 
 include_once(G5_PATH.'/tail.sub.php');
 ?>
+
+<button style="width: 150px; height:30px; float: right;">
+    <a href="../sliderSetting.php">sliderSetting</a>
+</button>
+
+
+
+
